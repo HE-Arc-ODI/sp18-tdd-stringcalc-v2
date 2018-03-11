@@ -28,4 +28,16 @@ public class StringCalculatorTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void addTwoNumbers() {
+    // Arrange / Build
+    StringCalculator calc = new StringCalculator();
+    String input = "1,2";
+    int expected = 3;
+    // Act / Operate
+    int actual = calc.add(input);
+    // Assert / Check
+    assertEquals(expected, actual);
+  }
+
 }
