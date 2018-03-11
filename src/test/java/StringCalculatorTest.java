@@ -83,4 +83,15 @@ public class StringCalculatorTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void delimitersCanBeOfAnyLength() {
+    // Arrange / Build
+    String input = "//[***]\n1***2***3";
+    int expected = 6;
+    // Act / Operate
+    int actual = StringCalculator.add(input);
+    // Assert / Check
+    assertEquals(expected, actual);
+  }
+
 }
