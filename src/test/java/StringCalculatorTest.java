@@ -66,4 +66,16 @@ public class StringCalculatorTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void declareDelimitersAtFirstLine() {
+    // Arrange / Build
+    StringCalculator calc = new StringCalculator();
+    String input = "//;\n1;2;3";
+    int expected = 6;
+    // Act / Operate
+    int actual = calc.add(input);
+    // Assert / Check
+    assertEquals(expected, actual);
+  }
+
 }
