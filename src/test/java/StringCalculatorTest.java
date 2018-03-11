@@ -16,5 +16,16 @@ public class StringCalculatorTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void testAddASingleNumber() {
+    // Arrange / Build
+    StringCalculator calc = new StringCalculator();
+    String input = "1";
+    int expected = 1;
+    // Act / Operate
+    int actual = calc.add(input);
+    // Assert / Check
+    assertEquals(expected, actual);
+  }
 
 }
