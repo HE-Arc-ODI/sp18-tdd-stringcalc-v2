@@ -78,4 +78,16 @@ public class StringCalculatorTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void ignoreNumbersBiggerThan1000() {
+    // Arrange / Build
+    StringCalculator calc = new StringCalculator();
+    String input = "2,1001";
+    int expected = 2;
+    // Act / Operate
+    int actual = calc.add(input);
+    // Assert / Check
+    assertEquals(expected, actual);
+  }
+
 }
