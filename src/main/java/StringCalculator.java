@@ -15,7 +15,8 @@ public class StringCalculator {
       input = input.substring(endDelimiterSequence + 1);
     }
     IntStream numbers = Arrays.stream(input.split(delimiter))
-        .mapToInt(Integer::parseInt);
+        .mapToInt(Integer::parseInt)
+        .filter(value -> value <= 1000);
     return numbers.sum();
   }
 }
