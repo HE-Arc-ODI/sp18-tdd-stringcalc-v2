@@ -4,7 +4,7 @@ import java.util.stream.IntStream;
 public class StringCalculator {
 
 
-  public int add(String input) {
+  public static int add(String input) {
     String delimiter = "[,\n]";
     if (input.isEmpty()) {
       return 0;
