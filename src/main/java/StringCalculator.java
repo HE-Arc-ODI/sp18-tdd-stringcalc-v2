@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 public class StringCalculator {
 
 
@@ -5,6 +8,8 @@ public class StringCalculator {
     if (input.isEmpty()) {
       return 0;
     }
-    return 1;
+    IntStream numbers = Arrays.stream(input.split(","))
+        .mapToInt(Integer::parseInt);
+    return numbers.sum();
   }
 }
