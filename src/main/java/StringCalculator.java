@@ -5,10 +5,16 @@ public class StringCalculator {
 
 
   public int add(String input) {
+    String delimiter = "[,\n]";
     if (input.isEmpty()) {
       return 0;
     }
-    IntStream numbers = Arrays.stream(input.split("[,\\n]"))
+    if (input.indexOf("//") == 0) {
+      int endDelimiterSequence = input.indexOf("\n");
+      delimiter = input.substring(2, endDelimiterSequence);
+      input = input.substring(endDelimiterSequence + 1);
+    }
+    IntStream numbers = Arrays.stream(input.split(delimiter))
         .mapToInt(Integer::parseInt);
     return numbers.sum();
   }
