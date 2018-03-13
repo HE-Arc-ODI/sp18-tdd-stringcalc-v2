@@ -18,10 +18,16 @@ public class StringCalculator {
       if (delimiter.indexOf("[") == 0) {
         Pattern anyLengthDelimitersPtn = Pattern.compile(ANYLENGTH_DELIMITERS_REGEX);
         Matcher anyLengthDelimitersMatcher = anyLengthDelimitersPtn.matcher(delimiter);
-        if (anyLengthDelimitersMatcher.find()) {
-          delimiter = anyLengthDelimitersMatcher.group(1);
-          delimiter = escapeSpecialRegexChars(delimiter);
+        StringBuilder b = new StringBuilder();
+        while (anyLengthDelimitersMatcher.find()) {
+          if (b.length() > 0) {
+            b.append("|");
+          }
+          b.append("(");
+          b.append(escapeSpecialRegexChars(anyLengthDelimitersMatcher.group(1)));
+          b.append(")");
         }
+        delimiter = b.toString();
       }
       input = input.substring(endDelimiterSequence + 1);
     }
