@@ -4,9 +4,14 @@
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class StringCalculatorTest {
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void testEmptyString() {
@@ -118,6 +123,17 @@ public class StringCalculatorTest {
     int actual = StringCalculator.add(input);
     // Assert / Check
     assertEquals(expected, actual);
+  }
+
+  @Test
+  public void negativeNumberRaisesException() {
+    // Arrange / Build
+    String input = "-1,2,3,5,-3,-6";
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("-1, -3, -6");
+    // Act / Operate
+    StringCalculator.add(input);
+    // Assert / Check
   }
 
 }
