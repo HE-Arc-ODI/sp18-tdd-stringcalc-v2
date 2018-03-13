@@ -5,7 +5,6 @@
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 
 /**
  * TDD Kata String calculator
@@ -45,10 +44,14 @@ public class StringCalculator {
       }
       input = input.substring(endDelimiterSequence + 1);
     }
-    IntStream numbers = Arrays.stream(input.split(delimiter))
+    int[] numbers = Arrays.stream(input.split(delimiter))
         .mapToInt(Integer::parseInt)
-        .filter(value -> value <= 1000);
-    return numbers.sum();
+        .filter(value -> value <= 1000).toArray();
+    int[] negatives = Arrays.stream(numbers).filter(value -> value < 0).toArray();
+    if (negatives.length > 0) {
+      throw new IllegalArgumentException("negatives not allowed: " + Arrays.toString(negatives));
+    }
+    return Arrays.stream(numbers).sum();
   }
 
   /**
