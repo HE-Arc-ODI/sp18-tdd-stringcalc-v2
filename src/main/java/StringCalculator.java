@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 
 public class StringCalculator {
 
-  private static final String ANYLENGTH_DELIMITERS_REGEX = "\\[(.*?)\\]";
+  private static final String MULTIPLE_DELIMITERS_REGEX = "\\[(.*?)\\]";
 
   public static int add(String input) {
     String delimiter = "[,\n]";
@@ -16,15 +16,15 @@ public class StringCalculator {
       int endDelimiterSequence = input.indexOf("\n");
       delimiter = input.substring(2, endDelimiterSequence);
       if (delimiter.indexOf("[") == 0) {
-        Pattern anyLengthDelimitersPtn = Pattern.compile(ANYLENGTH_DELIMITERS_REGEX);
-        Matcher anyLengthDelimitersMatcher = anyLengthDelimitersPtn.matcher(delimiter);
+        Pattern MultipleDelimitersPtn = Pattern.compile(MULTIPLE_DELIMITERS_REGEX);
+        Matcher MultipleDelimitersMatcher = MultipleDelimitersPtn.matcher(delimiter);
         StringBuilder b = new StringBuilder();
-        while (anyLengthDelimitersMatcher.find()) {
+        while (MultipleDelimitersMatcher.find()) {
           if (b.length() > 0) {
             b.append("|");
           }
           b.append("(");
-          b.append(escapeSpecialRegexChars(anyLengthDelimitersMatcher.group(1)));
+          b.append(escapeSpecialRegexChars(MultipleDelimitersMatcher.group(1)));
           b.append(")");
         }
         delimiter = b.toString();
