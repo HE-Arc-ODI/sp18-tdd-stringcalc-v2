@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018. Cours Outils de développement intégré, HE-Arc Neuchâtel.
+ */
+
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

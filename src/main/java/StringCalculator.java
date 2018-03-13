@@ -1,12 +1,26 @@
+/*
+ * Copyright (c) 2018. Cours Outils de développement intégré, HE-Arc Neuchâtel.
+ */
+
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
+/**
+ * TDD Kata String calculator
+ * REF: http://osherove.com/tdd-kata-1/
+ */
 public class StringCalculator {
 
   private static final String MULTIPLE_DELIMITERS_REGEX = "\\[(.*?)\\]";
 
+  /**
+   * Computes the sum of a string containing numbers separated by arbitrary delimiters. The delimiters are declared on the first line of the string.
+   *
+   * @param input numbers to be summed separated by delimiters
+   * @return sum of the numbers
+   */
   public static int add(String input) {
     String delimiter = "[,\n]";
     if (input.isEmpty()) {
