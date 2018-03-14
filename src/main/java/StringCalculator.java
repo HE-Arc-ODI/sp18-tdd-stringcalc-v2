@@ -15,7 +15,7 @@ public class StringCalculator {
   private static final String MULTIPLE_DELIMITERS_REGEX = "\\[(.*?)\\]";
 
   /**
-   * Computes the sum of a string containing numbers separated by arbitrary delimiters. The delimiters are declared on the first line of the string.
+   * Computes the sum of a string containing numbers separated by arbitrary delimiters. The delimiters are declared on the first line of the string. See kata ref link for more info.
    *
    * @param input numbers to be summed separated by delimiters
    * @return sum of the numbers
