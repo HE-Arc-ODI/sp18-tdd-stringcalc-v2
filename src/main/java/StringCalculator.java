@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TDD Kata String calculator
+ * TDD Kata String calculator, computes sum of a string of numbers.
  * REF: http://osherove.com/tdd-kata-1/
  */
 public class StringCalculator {
