@@ -117,7 +117,7 @@ public class StringCalculatorTest {
   @Test
   public void allowMultipleCustomDelimitersLongerThanOne() {
     // Arrange / Build
-    String input = "//[*çç][%-+]\n1*çç2%-+3";
+    String input = "//[*ç2ç][%-+]\n1*ç2ç2%-+3";
     int expected = 6;
     // Act / Operate
     int actual = StringCalculator.add(input);
