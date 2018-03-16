@@ -126,6 +126,17 @@ public class StringCalculatorTest {
   }
 
   @Test
+  public void customDelimiterWithDashNumber() {
+    // Arrange / Build
+    String input = "//[*ç-2ç][%-+]\n1*ç-2ç2%-+3*ç-2ç2%-+3";
+    int expected = 11;
+    // Act / Operate
+    int actual = StringCalculator.add(input);
+    // Assert / Check
+    assertEquals(expected, actual);
+  }
+
+  @Test
   public void negativeNumberRaisesException() {
     // Arrange / Build
     String input = "-1,2,3,5,-3,-6";
