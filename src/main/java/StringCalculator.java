@@ -29,27 +29,29 @@ public class StringCalculator {
       int endDelimiterSequence = input.indexOf("\n");
       delimiter = input.substring(2, endDelimiterSequence);
       if (delimiter.indexOf("[") == 0) {
-        Pattern MultipleDelimitersPtn = Pattern.compile(MULTIPLE_DELIMITERS_REGEX);
-        Matcher MultipleDelimitersMatcher = MultipleDelimitersPtn.matcher(delimiter);
-        StringBuilder b = new StringBuilder();
-        while (MultipleDelimitersMatcher.find()) {
-          if (b.length() > 0) {
-            b.append("|");
+        Pattern multipleDelimitersPtn = Pattern.compile(MULTIPLE_DELIMITERS_REGEX);
+        Matcher multipleDelimitersMatcher = multipleDelimitersPtn.matcher(delimiter);
+        StringBuilder delimitersRegex = new StringBuilder();
+        while (multipleDelimitersMatcher.find()) {
+          if (delimitersRegex.length() > 0) {
+            delimitersRegex.append("|");
           }
-          b.append("(");
-          b.append(escapeSpecialRegexChars(MultipleDelimitersMatcher.group(1)));
-          b.append(")");
+          delimitersRegex.append("(");
+          delimitersRegex.append(escapeSpecialRegexChars(multipleDelimitersMatcher.group(1)));
+          delimitersRegex.append(")");
         }
-        delimiter = b.toString();
+        delimiter = delimitersRegex.toString();
       }
       input = input.substring(endDelimiterSequence + 1);
     }
     int[] numbers = Arrays.stream(input.split(delimiter))
         .mapToInt(Integer::parseInt)
         .filter(value -> value <= 1000).toArray();
-    int[] negatives = Arrays.stream(numbers).filter(value -> value < 0).toArray();
-    if (negatives.length > 0) {
-      throw new IllegalArgumentException("negatives not allowed: " + Arrays.toString(negatives));
+    int[] negativeNumbers = Arrays.stream(numbers)
+        .filter(value -> value < 0).toArray();
+    if (negativeNumbers.length > 0) {
+      throw new IllegalArgumentException(
+          "negatives not allowed: " + Arrays.toString(negativeNumbers));
     }
     return Arrays.stream(numbers).sum();
   }
