@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 public class StringCalculator {
 
   private static final String MULTIPLE_DELIMITERS_REGEX = "\\[(.*?)\\]";
+  private static final String STANDARD_DELIMITERS = "[,\n]";
+  private static final int CEILING = 1000;
 
   /**
    * Computes the sum of a string containing numbers separated by arbitrary delimiters. The delimiters are declared on the first line of the string. See kata ref link for more info.
@@ -21,13 +23,53 @@ public class StringCalculator {
    * @return sum of the numbers
    */
   public static int add(String input) {
-    String delimiter = "[,\n]";
     if (input.isEmpty()) {
       return 0;
     }
-    if (input.indexOf("//") == 0) {
-      int endDelimiterSequence = input.indexOf("\n");
-      delimiter = input.substring(2, endDelimiterSequence);
+    String delimitersRegex = extractDelimiters(input);
+    String operands = extractOperands(input);
+    int[] numbers = Arrays.stream(operands.split(delimitersRegex))
+        .mapToInt(Integer::parseInt).toArray();
+    checkNegativeNumbers(numbers);
+    return Arrays.stream(numbers).filter(value -> value <= CEILING).sum();
+  }
+
+  private static void checkNegativeNumbers(int[] numbers) {
+    int[] negativeNumbers = Arrays.stream(numbers)
+        .filter(value -> value < 0).toArray();
+    if (negativeNumbers.length > 0) {
+      throw new IllegalArgumentException(
+          "negatives not allowed: " + Arrays.toString(negativeNumbers));
+    }
+  }
+
+  private static String extractOperands(String input) {
+    String delimiterStart = "//";
+    int endDelimiterDeclaration = 0;
+    if (input.indexOf(delimiterStart) == 0) {
+      endDelimiterDeclaration = findEndOfDelimiters(input);
+    }
+    return input.substring(endDelimiterDeclaration);
+  }
+
+  private static int findEndOfDelimiters(String input) {
+    int endDelimiterDeclaration = 0;
+    String simpleDelimiterEnd = "\n";
+    String multipleDelimiterEnd = "]\n";
+    if (input.contains(multipleDelimiterEnd)) {
+      endDelimiterDeclaration = input.indexOf(multipleDelimiterEnd) + multipleDelimiterEnd.length();
+    } else if (input.contains(simpleDelimiterEnd)) {
+      endDelimiterDeclaration = input.indexOf(simpleDelimiterEnd) + simpleDelimiterEnd.length();
+    }
+    return endDelimiterDeclaration;
+  }
+
+  private static String extractDelimiters(String input) {
+    String delimiter = STANDARD_DELIMITERS;
+    if (input.indexOf("//[") == 0) {
+      int endDelimiterDeclaration;
+      endDelimiterDeclaration = findEndOfDelimiters(input);
+      delimiter = input.substring(2, endDelimiterDeclaration);
       if (delimiter.indexOf("[") == 0) {
         Pattern multipleDelimitersPtn = Pattern.compile(MULTIPLE_DELIMITERS_REGEX);
         Matcher multipleDelimitersMatcher = multipleDelimitersPtn.matcher(delimiter);
@@ -42,18 +84,10 @@ public class StringCalculator {
         }
         delimiter = delimitersRegex.toString();
       }
-      input = input.substring(endDelimiterSequence + 1);
+    } else if (input.indexOf("//") == 0) {
+      delimiter = input.substring(2, 3);
     }
-    int[] numbers = Arrays.stream(input.split(delimiter))
-        .mapToInt(Integer::parseInt)
-        .filter(value -> value <= 1000).toArray();
-    int[] negativeNumbers = Arrays.stream(numbers)
-        .filter(value -> value < 0).toArray();
-    if (negativeNumbers.length > 0) {
-      throw new IllegalArgumentException(
-          "negatives not allowed: " + Arrays.toString(negativeNumbers));
-    }
-    return Arrays.stream(numbers).sum();
+    return delimiter;
   }
 
   /**
