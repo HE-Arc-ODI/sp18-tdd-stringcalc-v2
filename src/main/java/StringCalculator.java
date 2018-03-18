@@ -26,21 +26,30 @@ public class StringCalculator {
     if (input.isEmpty()) {
       return 0;
     }
+    return computeSum(input);
+  }
+
+  private static int computeSum(String input) {
+    int[] numbers = extractNumbers(input);
+    return Arrays.stream(numbers).filter(value -> value <= CEILING).sum();
+  }
+
+  private static int[] extractNumbers(String input) {
     String delimitersRegex = extractDelimiters(input);
     String operands = extractOperands(input);
     int[] numbers = Arrays.stream(operands.split(delimitersRegex))
         .mapToInt(Integer::parseInt).toArray();
-    checkNegativeNumbers(numbers);
-    return Arrays.stream(numbers).filter(value -> value <= CEILING).sum();
+    return checkNegativeNumbers(numbers);
   }
 
-  private static void checkNegativeNumbers(int[] numbers) {
+  private static int[] checkNegativeNumbers(int[] numbers) {
     int[] negativeNumbers = Arrays.stream(numbers)
         .filter(value -> value < 0).toArray();
     if (negativeNumbers.length > 0) {
       throw new IllegalArgumentException(
           "negatives not allowed: " + Arrays.toString(negativeNumbers));
     }
+    return numbers;
   }
 
   private static String extractOperands(String input) {
@@ -67,26 +76,43 @@ public class StringCalculator {
   private static String extractDelimiters(String input) {
     String delimiter = STANDARD_DELIMITERS;
     if (input.startsWith("//[")) {
-      int endDelimiterDeclaration;
-      endDelimiterDeclaration = findEndOfDelimiters(input);
-      delimiter = input.substring(2, endDelimiterDeclaration);
-      if (delimiter.startsWith("[")) {
-        Pattern multipleDelimitersPtn = Pattern.compile(MULTIPLE_DELIMITERS_REGEX);
-        Matcher multipleDelimitersMatcher = multipleDelimitersPtn.matcher(delimiter);
-        StringBuilder delimitersRegex = new StringBuilder();
-        while (multipleDelimitersMatcher.find()) {
-          if (delimitersRegex.length() > 0) {
-            delimitersRegex.append("|");
-          }
-          delimitersRegex.append("(");
-          delimitersRegex.append(escapeSpecialRegexChars(multipleDelimitersMatcher.group(1)));
-          delimitersRegex.append(")");
-        }
-        delimiter = delimitersRegex.toString();
-      }
+      delimiter = multipleDelimiterSplitter(input);
     } else if (input.startsWith("//")) {
-      delimiter = input.substring(2, 3);
+      delimiter = simpleDelimiterSplitter(input);
     }
+    return delimiter;
+  }
+
+  private static String simpleDelimiterSplitter(String input) {
+    String delimiter;
+    delimiter = input.substring(2, 3);
+    return delimiter;
+  }
+
+  private static String multipleDelimiterSplitter(String input) {
+    String delimiter;
+    int endDelimiterDeclaration;
+    endDelimiterDeclaration = findEndOfDelimiters(input);
+    delimiter = input.substring(2, endDelimiterDeclaration);
+    if (delimiter.startsWith("[")) {
+      delimiter = buildMultipleDelimiterRegex(delimiter);
+    }
+    return delimiter;
+  }
+
+  private static String buildMultipleDelimiterRegex(String delimiter) {
+    Pattern multipleDelimitersPtn = Pattern.compile(MULTIPLE_DELIMITERS_REGEX);
+    Matcher multipleDelimitersMatcher = multipleDelimitersPtn.matcher(delimiter);
+    StringBuilder delimitersRegex = new StringBuilder();
+    while (multipleDelimitersMatcher.find()) {
+      if (delimitersRegex.length() > 0) {
+        delimitersRegex.append("|");
+      }
+      delimitersRegex.append("(");
+      delimitersRegex.append(escapeSpecialRegexChars(multipleDelimitersMatcher.group(1)));
+      delimitersRegex.append(")");
+    }
+    delimiter = delimitersRegex.toString();
     return delimiter;
   }
 
