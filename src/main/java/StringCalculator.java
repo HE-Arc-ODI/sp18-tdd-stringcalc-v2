@@ -46,7 +46,7 @@ public class StringCalculator {
   private static String extractOperands(String input) {
     String delimiterStart = "//";
     int endDelimiterDeclaration = 0;
-    if (input.indexOf(delimiterStart) == 0) {
+    if (input.startsWith(delimiterStart)) {
       endDelimiterDeclaration = findEndOfDelimiters(input);
     }
     return input.substring(endDelimiterDeclaration);
@@ -66,11 +66,11 @@ public class StringCalculator {
 
   private static String extractDelimiters(String input) {
     String delimiter = STANDARD_DELIMITERS;
-    if (input.indexOf("//[") == 0) {
+    if (input.startsWith("//[")) {
       int endDelimiterDeclaration;
       endDelimiterDeclaration = findEndOfDelimiters(input);
       delimiter = input.substring(2, endDelimiterDeclaration);
-      if (delimiter.indexOf("[") == 0) {
+      if (delimiter.startsWith("[")) {
         Pattern multipleDelimitersPtn = Pattern.compile(MULTIPLE_DELIMITERS_REGEX);
         Matcher multipleDelimitersMatcher = multipleDelimitersPtn.matcher(delimiter);
         StringBuilder delimitersRegex = new StringBuilder();
@@ -84,7 +84,7 @@ public class StringCalculator {
         }
         delimiter = delimitersRegex.toString();
       }
-    } else if (input.indexOf("//") == 0) {
+    } else if (input.startsWith("//")) {
       delimiter = input.substring(2, 3);
     }
     return delimiter;
